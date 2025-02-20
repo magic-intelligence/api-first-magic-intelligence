@@ -55,7 +55,7 @@ paths:
                 $ref: "#/components/schemas/ConflictError"
   /students/{studentId}/emergency-contact/:
     post:
-      summary: "Pre-registro: Información básica"
+      summary: "Pre-registro: Contactos de emergencia"
       tags:
         - Student
       parameters:
@@ -112,7 +112,66 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ConflictError"
-           
+  /students/{studentId}/special-circunstance/:
+    post:
+      summary: "Pre-registro: Circunstancias especiales"
+      tags:
+        - Student
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          description: El id del estudiante
+          schema:
+            type: string
+            format: uuid
+            example: "550e8400-e29b-41d4-a716-446655440000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SpecialCircunstance"
+      responses:
+        "201":
+          description: El estudiante fue creado exitosamente
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        "400":
+          description: Error de validación en la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: No autenticado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: No tienes permisos para realizar esta acción
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+        "404":
+          description: Recurso no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "409":
+          description: Conflicto (El estudiante ya existe)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConflictError"
+              
 components:
   schemas:
     BasicInformationStudent:
@@ -124,10 +183,6 @@ components:
           format: uuid
           example: "550e8400-e29b-41d4-a716-446655440000"
         branchId:
-          type: string
-          format: uuid
-          example: "550e8400-e29b-41d4-a716-446655440000"
-        parentFamilyId:
           type: string
           format: uuid
           example: "550e8400-e29b-41d4-a716-446655440000" 
@@ -170,7 +225,7 @@ components:
           type: string
           format: uuid
           example: "550e8400-e29b-41d4-a716-446655440000"
-        parentFamilyId:
+        studentFamilyId:
           type: string
           format: uuid
           example: "550e8400-e29b-41d4-a716-446655440000" 
@@ -178,8 +233,50 @@ components:
           type: string
           enum: [primary, secondary]
           example: primary
-        
-
+      required:
+        - studentId
+        - studentFamilyId
+        - priorityLevel
+    SpecialCircunstance:
+      type: object
+      description: Esquema Para los circunstancias especiales
+      properties:
+        studentId:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        circunstanceId:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000" 
+        other:
+          type: string
+          example: "Se cayó y se pego en la moyera"
+      required:
+        - studentId
+        - circunstanceId
+    Circunstance:
+      type: object
+      description: Esquema Para los contactos de emergencia
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000" 
+        name:
+          type: string
+          example: "Mudanzas"
+        isActive:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: "2021-10-10T00:00:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2021-10-10T00:00:00.000Z"
 
 # Schemas generales para todos los endpoints
     ErrorResponse:
