@@ -1,0 +1,341 @@
+openapi: 3.0.0
+info:
+  title: API Documentation
+  version: 1.0.0
+paths:
+  /api/v1/branch-office/:
+    post:
+      summary: "Alta de un sucursal"
+      tags:
+        - BranchOffice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBranchOffice"
+      responses:
+        "201":
+          description: El sucursal fue creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseBranchOffice"
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        "400":
+          description: Error de validación en la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: No autenticado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: No tienes permisos para realizar esta acción
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+        "404":
+          description: Recurso no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "409":
+          description: Conflicto (El estudiante ya existe)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConflictError"
+    get:
+      summary: 'Lista de las sucursales de un centro educativo'
+      tags:
+        - BranchOffice
+      responses:
+        "200":
+          description: Lista de sucursales
+          content:
+            application/json:
+              schema:
+                properties:
+                  branchOffices:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ResponseBranchOffice"
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        "400":
+          description: Error de validación en la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: No autenticado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: No tienes permisos para realizar esta acción
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+        "404":
+          description: Recurso no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+  /api/v1/branch-office/{branchOfficeId}/add-service:
+    patch:
+      summary: "Agregar un servicio a una sucursal"
+      tags:
+        - BranchOffice
+      parameters:
+        - name: branchOfficeId
+          in: path
+          required: true
+          description: ID de la sucursal
+          schema:
+            type: string
+            format: bigint
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddServiceToBranchOffice"
+      responses:
+        "200":
+          description: El servicio fue agregado exitosamente a la sucursal
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseBranchOffice"
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        "400":
+          description: Error de validación en la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: No autenticado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: No tienes permisos para realizar esta acción
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+        "404":
+          description: Recurso no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "409":
+          description: Conflicto (El estudiante ya existe)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConflictError"
+components:
+  schemas:
+    AddServiceToBranchOffice:
+      type: object
+      description: Esquema para agregar un servicio a una sucursal
+      properties:
+        serviceId:
+          type: string
+          format: bigint
+          example: 1
+    ResponseAddServiceToBranchOffice:
+      type: object
+      description: Esquema para agregar un servicio a una sucursal
+      properties:
+        branchOfficeId:
+          type: string
+          format: bigint
+          example: 1
+        serviceId:
+          type: string
+          format: bigint
+          example: 1
+    CreateBranchOffice:
+      type: object
+      description: Esquema para dar de alta un sucursal
+      properties:
+        educationalCenterId:
+          type: string
+          format: bigint
+          example: 1
+        name:
+          type: string
+          example: Sucursal Monterrey
+        postalCode:
+          type: number
+          example: 64700
+        street:
+          type: string
+          example: Mallorca, Roma
+        interior_number:
+          type: string
+          example: 21
+        exterior_number:
+          type: string
+          example: NA
+        district:
+          type: string
+          example: Mallorca
+        city:
+          type: string
+          example: Monterrey
+        state:
+          type: string
+          example: Nuevo León
+
+    ResponseBranchOffice:
+      type: object
+      description: Esquema de respuesta para un centro educativo
+      properties:
+        branchOfficeId:
+          type: string
+          format: bigint
+          example: 1
+        educationalCenterId:
+          type: string
+          format: bigint
+          example: 1
+        name:
+          type: string
+          example: Sucursal Monterrey
+        postalCode:
+          type: number
+          example: 64700
+        street:
+          type: string
+          example: Mallorca, Roma
+        interiorNumber:
+          type: string
+          example: 21
+        exteriorNumber:
+          type: string
+          example: NA
+        district:
+          type: string
+          example: Mallorca
+        city:
+          type: string
+          example: Monterrey
+        state:
+          type: string
+          example: Nuevo León
+        isActive:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: "2021-10-10T00:00:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: null
+      required:
+        - educationalCenterId
+        - name
+        
+# Schemas generales para todos los endpoints
+    ErrorResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        error:
+          type: string
+          example: "Bad Request"
+        message:
+          type: string
+          example: "El campo 'name' es obligatorio"
+
+    UnauthorizedError:
+      allOf:
+        - $ref: "#/components/schemas/ErrorResponse"
+      properties:
+        statusCode:
+          example: 401
+        error:
+          example: "Unauthorized"
+        message:
+          example: "No tienes permisos para acceder a este recurso"
+
+    ForbiddenError:
+      allOf:
+        - $ref: "#/components/schemas/ErrorResponse"
+      properties:
+        statusCode:
+          example: 403
+        error:
+          example: "Forbidden"
+        message:
+          example: "No tienes autorización para realizar esta acción"
+
+    NotFoundError:
+      allOf:
+        - $ref: "#/components/schemas/ErrorResponse"
+      properties:
+        statusCode:
+          example: 404
+        error:
+          example: "Not Found"
+        message:
+          example: "Recurso no encontrado"
+
+    ConflictError:
+      allOf:
+        - $ref: "#/components/schemas/ErrorResponse"
+      properties:
+        statusCode:
+          example: 409
+        error:
+          example: "Conflict"
+        message:
+          example: "El estudiante ya está registrado"
+
+    InternalServerError:
+      allOf:
+        - $ref: "#/components/schemas/ErrorResponse"
+      properties:
+        statusCode:
+          example: 500
+        error:
+          example: "Internal Server Error"
+        message:
+          example: "Ocurrió un error inesperado en el servidor"

@@ -133,7 +133,7 @@ paths:
             application/json:
               schema:
                 properties:
-                  family:
+                  studentfamilies:
                     type: array
                     items:
                       $ref: "#/components/schemas/StudentFamily"
@@ -235,7 +235,7 @@ paths:
                   circunstances:
                     type: array
                     items:
-                      $ref: "./components.schemas.yaml#/components/schemas/Circunstance"
+                      $ref: "#/components/schemas/Circunstance"
                     example:
                       - id: "550e8400-e29b-41d4-a716-446655440000"
                         name: "Mudanzas"
@@ -374,19 +374,30 @@ components:
         id:
           type: string
           format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        studentId:
+          type: string
+          format: uuid
           example: "550e8400-e29b-41d4-a716-446655440000" 
-        familiers:
-          type: array
-          items:
-            properties:
-              id:
-                type: string
-                format: uuid
-                example: "550e8400-e29b-41d4-a716-446655440000"
-              relationship:
-                $ref: "#/components/schemas/RelationshipResponse"
-              person:
-                $ref: "#/components/schemas/PersonResponse"
+        parentFamily:
+          type: object
+          properties:
+            name:
+              type: string
+              example: "Edwin"
+            paternalSurname:
+              type: string
+              example: "Garcia"
+            maternalSurname:
+              type: string
+              example: "Garcia"
+            relationship:
+              type: string
+              example: "Papá"
+            description:
+              type: string
+              example: "Padre de familia"
+            
                   
     
     PersonResponse:

@@ -1,0 +1,159 @@
+openapi: 3.0.0
+info:
+  title: API Documentation
+  version: 1.0.0
+paths:
+  /api/v1/educational-center/:
+    post:
+      summary: "Alta del centro educativo"
+      tags:
+        - Educational Center
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEducationalCenter"
+      responses:
+        "201":
+          description: El estudiante fue creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseEducationalCenter"
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        "400":
+          description: Error de validación en la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: No autenticado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: No tienes permisos para realizar esta acción
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+        "404":
+          description: Recurso no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "409":
+          description: Conflicto (El estudiante ya existe)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConflictError"
+  
+components:
+  schemas:
+    CreateEducationalCenter:
+      type: object
+      description: Esquema para dar de alta un centro educativo
+      properties:
+        name:
+          type: string
+          example: Magic Intelligence A.P. de R.L. de C.V.
+    ResponseEducationalCenter:
+      type: object
+      description: Esquema de respuesta para un centro educativo
+      properties:
+        educationalCenterId:
+          type: string
+          example: 1
+        name:
+          type: string
+          example: Magic Intelligence A.P. de R.L. de C.V.
+        isActive:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: "2021-10-10T00:00:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: null
+        
+# Schemas generales para todos los endpoints
+    ErrorResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        error:
+          type: string
+          example: "Bad Request"
+        message:
+          type: string
+          example: "El campo 'name' es obligatorio"
+
+    UnauthorizedError:
+      allOf:
+        - $ref: "#/components/schemas/ErrorResponse"
+      properties:
+        statusCode:
+          example: 401
+        error:
+          example: "Unauthorized"
+        message:
+          example: "No tienes permisos para acceder a este recurso"
+
+    ForbiddenError:
+      allOf:
+        - $ref: "#/components/schemas/ErrorResponse"
+      properties:
+        statusCode:
+          example: 403
+        error:
+          example: "Forbidden"
+        message:
+          example: "No tienes autorización para realizar esta acción"
+
+    NotFoundError:
+      allOf:
+        - $ref: "#/components/schemas/ErrorResponse"
+      properties:
+        statusCode:
+          example: 404
+        error:
+          example: "Not Found"
+        message:
+          example: "Recurso no encontrado"
+
+    ConflictError:
+      allOf:
+        - $ref: "#/components/schemas/ErrorResponse"
+      properties:
+        statusCode:
+          example: 409
+        error:
+          example: "Conflict"
+        message:
+          example: "El estudiante ya está registrado"
+
+    InternalServerError:
+      allOf:
+        - $ref: "#/components/schemas/ErrorResponse"
+      properties:
+        statusCode:
+          example: 500
+        error:
+          example: "Internal Server Error"
+        message:
+          example: "Ocurrió un error inesperado en el servidor"

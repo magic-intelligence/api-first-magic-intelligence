@@ -2,7 +2,7 @@
   "name": "api-first-magic-intelligence",
   "version": "1.0.0",
   "description": "Documentacion de la api para magic intelligence",
-  "main": "src/index.js",
+  "main": "src/index1.js",
   "scripts": {
     "start": "nodemon src/index.js"
   },
